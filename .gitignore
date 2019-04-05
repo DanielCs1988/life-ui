@@ -176,3 +176,6 @@ modules.xml
 .idea/sonarlint
 
 # End of https://www.gitignore.io/api/node,webstorm+all
+
+# Automatically generated interfaces based on the GraphQL schema files
+graphql.ts
