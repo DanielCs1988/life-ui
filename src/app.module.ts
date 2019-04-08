@@ -1,14 +1,17 @@
 import { Module } from "@nestjs/common";
 import { GraphQLModule } from "@nestjs/graphql";
-import { join } from "path";
+
+import { UsersModule } from './users/users.module';
+import { SharedModule } from './shared/shared.module';
+import { QuestsModule } from './quests/quests.module';
 
 @Module({
     imports: [
+        UsersModule,
+        SharedModule,
+        QuestsModule,
         GraphQLModule.forRoot({
-            typePaths: ['./**/*.graphql'],
-            definitions: {
-                path: join(process.cwd(), 'src/graphql.ts'),
-            },
+            autoSchemaFile: 'schema.gql',
         }),
     ],
 })
