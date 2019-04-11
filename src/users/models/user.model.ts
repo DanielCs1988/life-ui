@@ -13,8 +13,8 @@ export class User {
   @Field()
   lastName: string;
 
-  @Field(type => Int)
-  createdAt: number;
+  @Field()
+  createdAt: string;
 
   @Field({nullable: true})
   nickName?: string;

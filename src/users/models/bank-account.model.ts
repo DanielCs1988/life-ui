@@ -9,6 +9,9 @@ export class BankAccount {
   @Field()
   account: string;
 
+  @Field()
+  createdAt: string;
+
   @Field({ nullable: true })
   name?: string;
 

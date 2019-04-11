@@ -5,7 +5,7 @@ import {BankAccount} from "../users/models/bank-account.model";
 export const USERS: User[] = [
   {
     id: 1,
-    createdAt: 123,
+    createdAt: '123',
     firstName: 'Daniel',
     lastName: 'Admin',
     nickName: 'Emperor',
@@ -14,7 +14,7 @@ export const USERS: User[] = [
   },
   {
     id: 2,
-    createdAt: 323,
+    createdAt: '323',
     firstName: 'Jack',
     lastName: 'User',
     nickName: 'Sw0rdsm4n',
@@ -26,7 +26,7 @@ export const USERS: User[] = [
 export const QUESTS: Quest[] = [
   {
     id: 1,
-    createdAt: 123,
+    createdAt: '123',
     deadline: 1234,
     description: 'smh',
     name: 'do it',
@@ -36,7 +36,7 @@ export const QUESTS: Quest[] = [
   },
   {
     id: 2,
-    createdAt: 2123,
+    createdAt: '2123',
     description: 'smh else',
     name: 'just do it',
     type: 'action',
@@ -49,11 +49,13 @@ export const BANK_ACCOUNTS: BankAccount[] = [
     id: 1,
     name: 'Meine account',
     account: '1234-5678',
+    createdAt: '1232213',
     owner: USERS[0],
   },
   {
     id: 2,
     account: '4234-2212',
+    createdAt: '34234423',
     owner: USERS[1],
   },
 ];

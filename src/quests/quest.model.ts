@@ -12,8 +12,8 @@ export class Quest {
   @Field()
   type: string;
 
-  @Field(type => Int)
-  createdAt: number;
+  @Field()
+  createdAt: string;
 
   @Field(type => User)
   creator: User;
