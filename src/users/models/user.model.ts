@@ -1,5 +1,6 @@
 import {Field, Int, ObjectType} from "type-graphql";
-import {Quest} from "../quests/quest.model";
+import {Quest} from "../../quests/quest.model";
+import {BankAccount} from "./bank-account.model";
 
 @ObjectType()
 export class User {
@@ -26,4 +27,7 @@ export class User {
 
   @Field(type => [Quest], { nullable: true })
   questsTaken?: Quest[];
+
+  @Field(type => [BankAccount], { nullable: true })
+  bankAccounts?: BankAccount[];
 }

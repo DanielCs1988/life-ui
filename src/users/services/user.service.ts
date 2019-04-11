@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import {User} from "./user.model";
-import {USERS} from "../shared/mockdata";
+import {User} from "../models/user.model";
+import {USERS} from "../../shared/mockdata";
 
 @Injectable()
 export class UserService {

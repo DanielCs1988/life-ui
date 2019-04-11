@@ -1,5 +1,5 @@
 import {Field, Int, ObjectType} from "type-graphql";
-import {User} from "../users/user.model";
+import {User} from "../users/models/user.model";
 
 @ObjectType()
 export class Quest {

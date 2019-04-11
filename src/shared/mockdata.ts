@@ -1,5 +1,6 @@
 import {Quest} from "../quests/quest.model";
-import {User} from "../users/user.model";
+import {User} from "../users/models/user.model";
+import {BankAccount} from "../users/models/bank-account.model";
 
 export const USERS: User[] = [
   {
@@ -40,6 +41,20 @@ export const QUESTS: Quest[] = [
     name: 'just do it',
     type: 'action',
     creator: USERS[1],
+  },
+];
+
+export const BANK_ACCOUNTS: BankAccount[] = [
+  {
+    id: 1,
+    name: 'Meine account',
+    account: '1234-5678',
+    owner: USERS[0],
+  },
+  {
+    id: 2,
+    account: '4234-2212',
+    owner: USERS[1],
   },
 ];
 
