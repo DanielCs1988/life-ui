@@ -34,7 +34,7 @@ export class UserResolver {
 
   @ResolveProperty()
   async bankAccounts(@Parent() user: User): Promise<BankAccount[]> {
-    return this.bankAccountService.getUserBankAccounts(user.id);
+    return this.bankAccountService.getUserBankAccounts(user);
   }
 
   @Mutation(returns => User)

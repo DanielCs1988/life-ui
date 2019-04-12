@@ -20,7 +20,7 @@ import {QuestsModule} from './quests/quests.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: 'life_ui',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [__dirname + '/**/*.model{.ts,.js}'],
       synchronize: true,
     }),
   ],
