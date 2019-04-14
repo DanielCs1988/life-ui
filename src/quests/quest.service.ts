@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from "typeorm";
 
 import { Quest } from "./quest.model";
+import {User} from "../users/models/user.model";
 
 @Injectable()
 export class QuestService {
@@ -15,7 +16,11 @@ export class QuestService {
     return this.questRepository.find();
   }
 
-  async getQuest(id: number): Promise<Quest> {
+  async getQuestById(id: number): Promise<Quest> {
     return this.questRepository.findOne(id);
+  }
+
+  async getQuestByCreator(creator: User): Promise<Quest[]> {
+    return this.questRepository.find({ creator });
   }
 }

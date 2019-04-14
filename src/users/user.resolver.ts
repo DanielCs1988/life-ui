@@ -9,12 +9,15 @@ import {UserDto} from "./models/user.dto";
 import {PubSub} from 'apollo-server-express';
 import {SubscriptionTypes} from "../constants/subscription-types";
 import {Tokens} from "../constants/tokens";
+import {Quest} from "../quests/quest.model";
+import {QuestService} from "../quests/quest.service";
 
 @Resolver(of => User)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly bankAccountService: BankAccountService,
+    private readonly questService: QuestService,
     @Inject(Tokens.PUB_SUB) private readonly pubSub: PubSub,
   ) { }
   
@@ -35,6 +38,11 @@ export class UserResolver {
   @ResolveProperty()
   async bankAccounts(@Parent() user: User): Promise<BankAccount[]> {
     return this.bankAccountService.getUserBankAccounts(user);
+  }
+
+  @ResolveProperty()
+  async questsCreated(@Parent() user: User): Promise<Quest[]> {
+    return this.questService.getQuestByCreator(user);
   }
 
   @Mutation(returns => User)

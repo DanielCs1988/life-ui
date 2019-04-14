@@ -13,6 +13,6 @@ export class QuestResolver {
 
   @Query(returns => Quest)
   async quest(@Args('id') id: number): Promise<Quest> {
-    return this.questService.getQuest(id);
+    return this.questService.getQuestById(id);
   }
 }
