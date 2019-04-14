@@ -11,12 +11,15 @@ import {SubscriptionTypes} from "../constants/subscription-types";
 import {Tokens} from "../constants/tokens";
 import {Quest} from "../quests/quest.model";
 import {QuestService} from "../quests/quest.service";
+import {AddressService} from "./services/address.service";
+import {Address} from "./models/address.model";
 
 @Resolver(of => User)
 export class UserResolver {
   constructor(
     private readonly userService: UserService,
     private readonly bankAccountService: BankAccountService,
+    private readonly addressService: AddressService,
     private readonly questService: QuestService,
     @Inject(Tokens.PUB_SUB) private readonly pubSub: PubSub,
   ) { }
@@ -43,6 +46,11 @@ export class UserResolver {
   @ResolveProperty()
   async questsCreated(@Parent() user: User): Promise<Quest[]> {
     return this.questService.getQuestByCreator(user);
+  }
+
+  @ResolveProperty()
+  async addresses(@Parent() user: User): Promise<Address[]> {
+    return this.addressService.getUserAddresses(user);
   }
 
   @Mutation(returns => User)

@@ -8,7 +8,7 @@ import { Tokens } from "../constants/tokens";
     {
       provide: Tokens.PUB_SUB,
       useValue: new PubSub(),
-    }
+    },
   ],
   exports: [
     Tokens.PUB_SUB,
