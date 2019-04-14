@@ -3,33 +3,37 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { User } from '../models/user.model';
-import { UserDto } from '../models/user.dto';
+import { CreateUserDto } from '../models/create-user.dto';
+import { UpdateUserDto } from '../models/update-user.dto';
+import { ICrudService } from '../../shared/CrudService';
 
 @Injectable()
-export class UserService {
+export class UserService implements ICrudService<User> {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
   ) { }
 
-  async getAllUsers(): Promise<User[]> {
+  async getAll(): Promise<User[]> {
     return this.userRepository.find();
   }
 
-  async getUser(id: number): Promise<User> {
+  async getById(id: number): Promise<User> {
     return this.userRepository.findOne(id);
   }
 
-  async createUser(data: UserDto): Promise<User> {
+  async create(data: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(data);
     return this.userRepository.save(user);
   }
 
-  updateUser(user: User): Promise<User> {
-    return this.userRepository.save(user);
+  async update(data: UpdateUserDto): Promise<User> {
+    const user = await this.userRepository.preload(data);
+    return await this.userRepository.save(user);
   }
 
-  deleteUser(user: User): Promise<User> {
-    return this.userRepository.remove(user);
+  async delete(id: number): Promise<boolean> {
+    const result = await this.userRepository.delete(id);
+    return result.affected > 0;
   }
 }
