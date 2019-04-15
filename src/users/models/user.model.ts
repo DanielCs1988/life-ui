@@ -51,6 +51,10 @@ export class User {
   @Field({ nullable: true })
   nickName?: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  profilePictureUri?: string;
+
   @Column({ length: 100, nullable: true })
   @Field({ nullable: true })
   email?: string;

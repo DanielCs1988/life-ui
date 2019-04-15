@@ -1,5 +1,5 @@
 import {ArgsType, Field} from "type-graphql";
-import {IsEmail, IsNotEmpty, IsOptional, Length} from "class-validator";
+import { IsEmail, IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
 
 @ArgsType()
 export class CreateUserDto {
@@ -15,6 +15,11 @@ export class CreateUserDto {
   @IsNotEmpty()
   @IsOptional()
   nickName?: string;
+
+  @Field({ nullable: true })
+  @MinLength(10)
+  @IsOptional()
+  profilePictureUri?: string;
 
   @Field({ nullable: true })
   @IsEmail()
