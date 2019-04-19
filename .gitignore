@@ -177,5 +177,5 @@ modules.xml
 
 # End of https://www.gitignore.io/api/node,webstorm+all
 
-# Automatically generated interfaces based on the GraphQL schema files
-graphql.ts
+# Automatically generated GraphQL schema file, based on typescript models
+schema.gql
