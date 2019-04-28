@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from "typeorm";
 
-import { Quest } from "./quest.model";
-import {User} from "../users/models/user.model";
+import { Quest } from "../models/quest.model";
+import {User} from "../../users/models/user.model";
 
 @Injectable()
 export class QuestService {

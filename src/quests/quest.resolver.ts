@@ -1,6 +1,6 @@
 import { Resolver, Query, Args } from '@nestjs/graphql';
-import { Quest } from "./quest.model";
-import {QuestService} from "./quest.service";
+import { Quest } from "./models/quest.model";
+import {QuestService} from "./services/quest.service";
 
 @Resolver(of => Quest)
 export class QuestResolver {

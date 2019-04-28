@@ -1,14 +1,12 @@
-import { Field, Float, Int, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Field, Float, ObjectType } from "type-graphql";
+import { Column, Entity, ManyToOne } from "typeorm";
+
 import { User } from "./user.model";
+import { BaseModel } from '../../shared/base.model';
 
 @Entity()
 @ObjectType()
-export class Address {
-  @PrimaryGeneratedColumn()
-  @Field(type => Int)
-  id: number;
-
+export class Address extends BaseModel {
   @Column()
   @Field()
   address: string;

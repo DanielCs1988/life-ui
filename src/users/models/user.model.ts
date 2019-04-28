@@ -1,26 +1,22 @@
-import {Field, Int, ObjectType} from "type-graphql";
+import { Field, ObjectType } from 'type-graphql';
 import {
   AfterLoad,
-  BeforeInsert, BeforeUpdate,
   Column,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
-  PrimaryGeneratedColumn
-} from "typeorm";
+} from 'typeorm';
 
-import {Quest} from "../../quests/quest.model";
-import {BankAccount} from "./bank-account.model";
-import {Address} from "./address.model";
+import { Quest } from '../../quests/models/quest.model';
+import { BankAccount } from './bank-account.model';
+import { Address } from './address.model';
+import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
+import { UpdateTrackerBaseModel } from '../../shared/update-tracker-base.model';
 
 @Entity()
 @ObjectType()
-export class User {
-  @PrimaryGeneratedColumn()
-  @Field(type => Int)
-  id: number;
-
+export class User extends UpdateTrackerBaseModel {
   @Column({ length: 100 })
   @Field()
   firstName: string;
@@ -28,24 +24,6 @@ export class User {
   @Column({ length: 100 })
   @Field()
   lastName: string;
-
-  @Column({ length: 27 })
-  @Field()
-  createdAt: string;
-
-  @BeforeInsert()
-  setCreationDate() {
-    this.createdAt = new Date().toISOString();
-  }
-
-  @Column({ length: 27, nullable: true })
-  @Field({ nullable: true })
-  lastUpdated?: string;
-
-  @BeforeUpdate()
-  setLastUpdated() {
-    this.lastUpdated = new Date().toISOString();
-  }
 
   @Column({ length: 100, nullable: true })
   @Field({ nullable: true })
@@ -71,6 +49,10 @@ export class User {
   @JoinTable()
   @Field(type => [Quest], { nullable: true })
   questsTaken?: Quest[];
+
+  @OneToMany(type => RepeatableQuest, quest => quest.creator, { nullable: true })
+  @Field(type => [RepeatableQuest], { nullable: true })
+  repeatableQuests?: RepeatableQuest[];
 
   @OneToMany(type => BankAccount, bankAccount => bankAccount.owner, { nullable: true })
   @Field(type => [BankAccount], { nullable: true })

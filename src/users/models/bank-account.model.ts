@@ -1,28 +1,21 @@
-import { Field, Int, ObjectType } from "type-graphql";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
+import { Column, Entity, ManyToOne } from "typeorm";
 
 import { User } from "./user.model";
+import { BaseModel } from '../../shared/base.model';
 
 @Entity()
 @ObjectType()
-export class BankAccount {
-  @PrimaryGeneratedColumn()
-  @Field(type => Int)
-  id: number;
-
+export class BankAccount extends BaseModel {
   @Column({ length: 50 })
   @Field()
   account: string;
 
-  @Column({ length: 20 })
-  @Field()
-  createdAt: string;
+  @ManyToOne(type => User, user => user.bankAccounts)
+  @Field(type => User)
+  owner: User;
 
   @Column({ length: 100, nullable: true })
   @Field({ nullable: true })
   name?: string;
-
-  @ManyToOne(type => User, user => user.bankAccounts)
-  @Field(type => User)
-  owner: User;
 }

@@ -1,9 +1,9 @@
 import {forwardRef, Module} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { QuestService } from './quest.service';
+import { QuestService } from './services/quest.service';
 import { QuestResolver } from "./quest.resolver";
-import { Quest } from "./quest.model";
+import { Quest } from "./models/quest.model";
 import {UsersModule} from "../users/users.module";
 
 @Module({
