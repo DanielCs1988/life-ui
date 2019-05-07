@@ -10,12 +10,12 @@ export class QuestResolver {
 
   @Query(returns => [Quest])
   quests(): Promise<Quest[]> {
-    return this.questService.getAllQuests();
+    return this.questService.getAll();
   }
 
   @Query(returns => Quest)
   async quest(@Args('id') id: number): Promise<Quest> {
-    const quest = await this.questService.getQuestById(id);
+    const quest = await this.questService.getById(id);
     if (!quest) {
       throw new NotFoundException(`Quest with ID ${id} does not exist.`);
     }
