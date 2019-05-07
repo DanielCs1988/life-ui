@@ -17,7 +17,7 @@ export class RepeatableQuest extends UpdateTrackerBaseModel {
 
   @Column('int')
   @Field(type => Int)
-  cooldownInDays: number;
+  cooldownInSeconds: number;
 
   @ManyToOne(type => User, user => user.repeatableQuests)
   @Field(type => User)

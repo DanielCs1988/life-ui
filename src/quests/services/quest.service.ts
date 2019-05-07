@@ -20,7 +20,12 @@ export class QuestService {
     return this.questRepository.findOne(id);
   }
 
-  async getQuestByCreator(creator: User): Promise<Quest[]> {
+  async getQuestsByCreator(creator: User): Promise<Quest[]> {
     return this.questRepository.find({ creator });
+  }
+
+  async getQuestsByParticipant(participant: User): Promise<Quest[]> {
+    // TODO: many to many
+    return [];
   }
 }

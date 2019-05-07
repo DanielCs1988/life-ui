@@ -1,21 +1,23 @@
-import { HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 import { Query, Resolver, Args, ResolveProperty, Parent, Mutation, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'apollo-server-express';
-import { Int } from 'type-graphql';
+import { Arg, Int } from 'type-graphql';
 
-import { User } from './models/user.model';
-import { UserService } from './services/user.service';
-import { BankAccount } from './models/bank-account.model';
-import { BankAccountService } from './services/bank-account.service';
-import { IdArgs } from '../shared/types';
-import { CreateUserDto } from './models/create-user.dto';
-import { SubscriptionTypes } from '../constants/subscription-types';
-import { Tokens } from '../constants/tokens';
-import { Quest } from '../quests/models/quest.model';
-import { QuestService } from '../quests/services/quest.service';
-import { AddressService } from './services/address.service';
-import { Address } from './models/address.model';
-import { UpdateUserDto } from './models/update-user.dto';
+import { User } from '../models/user.model';
+import { UserService } from '../services/user.service';
+import { BankAccount } from '../models/bank-account.model';
+import { BankAccountService } from '../services/bank-account.service';
+import { IdArgs } from '../../shared/types';
+import { CreateUserDto } from '../models/create-user.dto';
+import { SubscriptionTypes } from '../../constants/subscription-types';
+import { Tokens } from '../../constants/tokens';
+import { Quest } from '../../quests/models/quest.model';
+import { QuestService } from '../../quests/services/quest.service';
+import { AddressService } from '../services/address.service';
+import { Address } from '../models/address.model';
+import { UpdateUserDto } from '../models/update-user.dto';
+import { RepeatableQuestService } from '../../quests/services/repeatable-quest.service';
+import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
 
 @Resolver(of => User)
 export class UserResolver {
@@ -24,10 +26,11 @@ export class UserResolver {
     private readonly bankAccountService: BankAccountService,
     private readonly addressService: AddressService,
     private readonly questService: QuestService,
+    private readonly repeatableQuestService: RepeatableQuestService,
     @Inject(Tokens.PUB_SUB) private readonly pubSub: PubSub,
   ) { }
 
-  @Query(returns => [ User ])
+  @Query(returns => [User])
   async users(): Promise<User[]> {
     return this.userService.getAll();
   }
@@ -36,7 +39,7 @@ export class UserResolver {
   async user(@Args() { id }: IdArgs): Promise<User> {
     const user = await this.userService.getById(id);
     if (!user) {
-      throw new HttpException('User not found.', HttpStatus.NOT_FOUND);
+      throw new NotFoundException(`User with ID ${id} does not exist.`);
     }
     return user;
   }
@@ -48,7 +51,12 @@ export class UserResolver {
 
   @ResolveProperty()
   async questsCreated(@Parent() user: User): Promise<Quest[]> {
-    return this.questService.getQuestByCreator(user);
+    return this.questService.getQuestsByCreator(user);
+  }
+
+  @ResolveProperty()
+  async repeatableQuests(@Parent() user: User): Promise<RepeatableQuest[]> {
+    return this.repeatableQuestService.getByCreator(user);
   }
 
   @ResolveProperty()
@@ -58,14 +66,14 @@ export class UserResolver {
 
   // TODO: error handling for mutations
   @Mutation(returns => User)
-  async createUser(@Args() user: CreateUserDto): Promise<User> {
+  async createUser(@Arg('data') user: CreateUserDto): Promise<User> {
     const userCreated = await this.userService.create(user);
     this.pubSub.publish(SubscriptionTypes.USER_CREATED, { userCreated });
     return userCreated;
   }
 
   @Mutation(returns => User)
-  async updateUser(@Args() user: UpdateUserDto): Promise<User> {
+  async updateUser(@Arg('data') user: UpdateUserDto): Promise<User> {
     const userUpdated = await this.userService.update(user);
     this.pubSub.publish(SubscriptionTypes.USER_UPDATED, { userUpdated });
     return userUpdated;

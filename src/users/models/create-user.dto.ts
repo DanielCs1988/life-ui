@@ -1,7 +1,7 @@
-import { ArgsType, Field } from 'type-graphql';
+import { Field, InputType } from 'type-graphql';
 import { IsEmail, IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
 
-@ArgsType()
+@InputType()
 export class CreateUserDto {
   @Field()
   @Length(2, 100)

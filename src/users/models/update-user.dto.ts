@@ -1,7 +1,7 @@
-import { ArgsType, Field, Int } from 'type-graphql';
+import { Field, InputType, Int } from 'type-graphql';
 import { IsEmail, IsNotEmpty, IsOptional, IsPositive, Length, MinLength } from 'class-validator';
 
-@ArgsType()
+@InputType()
 export class UpdateUserDto {
   @Field(type => Int)
   @IsPositive()
