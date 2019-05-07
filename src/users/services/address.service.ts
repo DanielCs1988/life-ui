@@ -5,28 +5,39 @@ import { Repository } from 'typeorm';
 import { Address } from '../models/address.model';
 import { User } from '../models/user.model';
 import { AddressDto } from '../models/address.dto';
+import { ICrudService } from '../../shared/CrudService';
 
 @Injectable()
-export class AddressService {
+export class AddressService implements ICrudService<Address> {
   constructor(
     @InjectRepository(Address)
     private readonly addressRepository: Repository<Address>,
   ) { }
 
-  getUserAddresses(owner: User): Promise<Address[]> {
-    return this.addressRepository.find({ owner });
+  getAll(): Promise<Address[]> {
+    return this.addressRepository.find();
   }
 
-  createAddress(data: AddressDto): Promise<Address> {
+  getById(id: number): Promise<Address> {
+    return this.addressRepository.findOne(id);
+  }
+
+  create(data: AddressDto): Promise<Address> {
     const address = this.addressRepository.create(data);
     return this.addressRepository.save(address);
   }
 
-  updateAddress(address: Address): Promise<Address> {
+  async delete(id: number): Promise<boolean> {
+    const result = await this.addressRepository.delete(id);
+    return result.affected > 0;
+  }
+
+  async update(data: Partial<Address>): Promise<Address> {
+    const address = await this.addressRepository.preload(data);
     return this.addressRepository.save(address);
   }
 
-  deleteAddress(address: Address): Promise<Address> {
-    return this.addressRepository.remove(address);
+  getUserAddresses(owner: User): Promise<Address[]> {
+    return this.addressRepository.find({ owner });
   }
 }

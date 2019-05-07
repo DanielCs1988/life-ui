@@ -1,7 +1,7 @@
-import { ArgsType, Field } from "type-graphql";
+import { Field, InputType } from 'type-graphql';
 import { IsNotEmpty, IsNumber, IsOptional, Length, Max, Min } from "class-validator";
 
-@ArgsType()
+@InputType()
 export class AddressDto {
   @Field()
   @Length(5, 255)

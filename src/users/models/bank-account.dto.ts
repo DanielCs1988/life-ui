@@ -1,7 +1,7 @@
-import { ArgsType, Field } from "type-graphql";
+import { Field, InputType } from 'type-graphql';
 import { IsNotEmpty, IsOptional, Length } from "class-validator";
 
-@ArgsType()
+@InputType()
 export class BankAccountDto {
   @Field()
   @Length(10, 50)

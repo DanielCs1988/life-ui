@@ -1,23 +1,39 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from "typeorm";
+import { Repository } from 'typeorm';
 
-import { Quest } from "../models/quest.model";
-import {User} from "../../users/models/user.model";
+import { Quest } from '../models/quest.model';
+import { User } from '../../users/models/user.model';
+import { ICrudService } from '../../shared/CrudService';
 
 @Injectable()
-export class QuestService {
+export class QuestService implements ICrudService<Quest> {
   constructor(
     @InjectRepository(Quest)
     private readonly questRepository: Repository<Quest>,
   ) { }
 
-  async getAllQuests(): Promise<Quest[]>  {
+  create(data: Partial<Quest>): Promise<Quest> {
+    const quest = this.questRepository.create(data);
+    return this.questRepository.save(quest);
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const result = await this.questRepository.delete(id);
+    return result.affected > 0;
+  }
+
+  getAll(): Promise<Quest[]> {
     return this.questRepository.find();
   }
 
-  async getQuestById(id: number): Promise<Quest> {
+  getById(id: number): Promise<Quest> {
     return this.questRepository.findOne(id);
+  }
+
+  async update(data: Partial<Quest>): Promise<Quest> {
+    const quest = await this.questRepository.preload(data);
+    return this.questRepository.save(quest);
   }
 
   async getQuestsByCreator(creator: User): Promise<Quest[]> {

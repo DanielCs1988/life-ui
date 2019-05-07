@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { ICrudService } from '../../shared/CrudService';
-import { RepeatableQuest } from '../models/repeatable-quest.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { ICrudService } from '../../shared/CrudService';
+import { RepeatableQuest } from '../models/repeatable-quest.model';
 import { User } from '../../users/models/user.model';
-import { Quest } from '../models/quest.model';
 
 @Injectable()
 export class RepeatableQuestService implements ICrudService<RepeatableQuest> {

@@ -22,14 +22,14 @@ export class UserService implements ICrudService<User> {
     return this.userRepository.findOne(id);
   }
 
-  async create(data: CreateUserDto): Promise<User> {
+  create(data: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(data);
     return this.userRepository.save(user);
   }
 
   async update(data: UpdateUserDto): Promise<User> {
     const user = await this.userRepository.preload(data);
-    return await this.userRepository.save(user);
+    return this.userRepository.save(user);
   }
 
   async delete(id: number): Promise<boolean> {
