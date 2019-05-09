@@ -5,7 +5,7 @@ import { ICrudService } from './CrudService';
 export function createBaseResolver<T extends ClassType>(entityName: string, type: T) {
   @Resolver({ isAbstract: true })
   abstract class BaseResolver {
-    protected constructor(protected readonly service: ICrudService<T>) { }
+    protected abstract readonly service: ICrudService<any>;
 
     @Query(returns => [type], { name: `${entityName}s` })
     async getAll(): Promise<T[]> {

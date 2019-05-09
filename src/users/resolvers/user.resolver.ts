@@ -115,13 +115,14 @@ const UserBaseResolver = createBaseResolver('user', User);
 
 @Resolver(of => User)
 export class UserResolver extends UserBaseResolver {
-  constructor(service: UserService) {
-    super(service);
+  constructor(protected readonly service: UserService) {
+    super();
   }
 
   @Query(returns => User)
   async user(@Args() { id }: IdArgs): Promise<User> {
     const user = await this.service.getById(id);
+
     if (!user) {
       throw new NotFoundException(`User with ID ${id} does not exist.`);
     }
