@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 
 import { Quest } from '../models/quest.model';
 import { User } from '../../users/models/user.model';
-import { ICrudService } from '../../shared/CrudService';
+import { ICrudService } from '../../shared/crud-service.interface';
 
 @Injectable()
 export class QuestService implements ICrudService<Quest> {

@@ -13,10 +13,13 @@ import { BankAccount } from './bank-account.model';
 import { Address } from './address.model';
 import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
 import { UpdateTrackerBaseModel } from '../../shared/update-tracker-base.model';
+import { IUser } from '../interfaces/user.interface';
+import { IAddress } from '../interfaces/address.interface';
+import { IBankAccount } from '../interfaces/bank-account.interface';
 
 @Entity()
 @ObjectType()
-export class User extends UpdateTrackerBaseModel {
+export class User extends UpdateTrackerBaseModel implements IUser {
   @Column({ length: 100 })
   @Field()
   firstName: string;
@@ -56,11 +59,11 @@ export class User extends UpdateTrackerBaseModel {
 
   @OneToMany(type => BankAccount, bankAccount => bankAccount.owner, { nullable: true })
   @Field(type => [BankAccount], { nullable: true })
-  bankAccounts?: BankAccount[];
+  bankAccounts?: IBankAccount[];
 
   @OneToMany(type => Address, address => address.owner, { nullable: true })
   @Field(type => [Address], { nullable: true })
-  addresses: Address[];
+  addresses: IAddress[];
 
   @AfterLoad()
   swapNullCollections() {

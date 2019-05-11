@@ -3,19 +3,29 @@ import { Args, Mutation, Query, Subscription } from '@nestjs/graphql';
 import { ClassType, Int, Resolver } from 'type-graphql';
 import { PubSub } from 'apollo-server-express';
 
-import { ICrudService } from './CrudService';
+import { ICrudService } from './crud-service.interface';
 import { IdArgs } from './types';
 import { capitalize } from './utils';
 
+export interface ICreateBaseResolverParams<T, C, U> {
+  name: string;
+  pluralName?: string;
+  entity: T;
+  createDto: C;
+  updateDto: U;
+}
+
 // TODO: error handling
 export function createBaseResolver<T extends ClassType, C extends ClassType, U extends ClassType>(
-  entityName: string, type: T, createDto: C, updateDto: U
+  params: ICreateBaseResolverParams<T, C, U>
 ) {
-  const ucName = capitalize(entityName);
+  const { name, entity, createDto, updateDto } = params;
+  const { pluralName = `${name}s` } = params;
+  const ucName = capitalize(name);
   const events = {
-    CREATED: `${entityName}Created`,
-    UPDATED: `${entityName}Updated`,
-    DELETED: `${entityName}Deleted`,
+    CREATED: `${name}Created`,
+    UPDATED: `${name}Updated`,
+    DELETED: `${name}Deleted`,
   };
 
   @Resolver({ isAbstract: true })
@@ -23,12 +33,12 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
     protected abstract readonly service: ICrudService<any>;
     protected abstract readonly pubSub: PubSub;
 
-    @Query(returns => [type], { name: `${entityName}s` })
+    @Query(returns => [entity], { name: pluralName })
     async getAll(): Promise<T[]> {
       return this.service.getAll();
     }
 
-    @Query(returns => type, { name: `${entityName}` })
+    @Query(returns => entity, { name })
     async get(@Args() { id }: IdArgs): Promise<T> {
       const entity = this.service.getById(id);
       if (!entity) {
@@ -37,14 +47,14 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
       return entity;
     }
 
-    @Mutation(returns => type, { name: `create${ucName}` })
+    @Mutation(returns => entity, { name: `create${ucName}` })
     async create(@Args({ name: 'data', type: () => createDto }) createDto: C): Promise<T> {
       const userCreated = await this.service.create(createDto);
       this.pubSub.publish(events.CREATED, { userCreated });
       return userCreated;
     }
 
-    @Mutation(returns => type, { name: `update${ucName}` })
+    @Mutation(returns => entity, { name: `update${ucName}` })
     async update(@Args({ name: 'data', type: () => updateDto }) updateDto: U): Promise<T> {
       const userUpdated = await this.service.update(updateDto);
       this.pubSub.publish(events.UPDATED, { userUpdated });
@@ -60,12 +70,12 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
       return isDeleted;
     }
 
-    @Subscription(returns => type)
+    @Subscription(returns => entity)
     userCreated(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.CREATED);
     }
 
-    @Subscription(returns => type)
+    @Subscription(returns => entity)
     userUpdated(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.UPDATED);
     }

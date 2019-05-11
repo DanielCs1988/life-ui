@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ICrudService } from '../../shared/CrudService';
+import { ICrudService } from '../../shared/crud-service.interface';
 import { RepeatableQuest } from '../models/repeatable-quest.model';
 import { User } from '../../users/models/user.model';
 

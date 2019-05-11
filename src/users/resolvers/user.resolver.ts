@@ -17,7 +17,12 @@ import { RepeatableQuestService } from '../../quests/services/repeatable-quest.s
 import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
 import { createBaseResolver } from '../../shared/base.resolver';
 
-const UserBaseResolver = createBaseResolver('user', User, CreateUserDto, UpdateUserDto);
+const UserBaseResolver = createBaseResolver({
+  name: 'user',
+  entity: User,
+  createDto: CreateUserDto,
+  updateDto: UpdateUserDto,
+});
 
 @Resolver(of => User)
 export class UserResolver extends UserBaseResolver {

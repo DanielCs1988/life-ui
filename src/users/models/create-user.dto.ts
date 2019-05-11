@@ -1,8 +1,9 @@
 import { Field, InputType } from 'type-graphql';
 import { IsEmail, IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
+import { IUser } from '../interfaces/user.interface';
 
 @InputType()
-export class CreateUserDto {
+export class CreateUserDto implements IUser {
   @Field()
   @Length(2, 100)
   firstName: string;

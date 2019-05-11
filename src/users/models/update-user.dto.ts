@@ -1,12 +1,10 @@
-import { Field, InputType, Int } from 'type-graphql';
-import { IsEmail, IsNotEmpty, IsOptional, IsPositive, Length, MinLength } from 'class-validator';
+import { Field, InputType } from 'type-graphql';
+import { IsEmail, IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
+import { BaseDto } from '../../shared/base.dto';
+import { IUser } from '../interfaces/user.interface';
 
 @InputType()
-export class UpdateUserDto {
-  @Field(type => Int)
-  @IsPositive()
-  id: number;
-
+export class UpdateUserDto extends BaseDto implements IUser {
   @Field({ nullable: true })
   @Length(2, 100)
   @IsOptional()

@@ -5,7 +5,7 @@ import {Repository} from "typeorm";
 import {BankAccount} from "../models/bank-account.model";
 import {User} from "../models/user.model";
 import {BankAccountDto} from "../models/bank-account.dto";
-import { ICrudService } from '../../shared/CrudService';
+import { ICrudService } from '../../shared/crud-service.interface';
 
 @Injectable()
 export class BankAccountService implements ICrudService<BankAccount> {
