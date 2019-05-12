@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { ICrudService } from '@shared/crud-service.interface';
 import { User } from '@users/models/user.model';
 import { Quest } from '../models/quest.model';
-import { CreateQuestDto } from '../models/create-quest.dto';
+import { IUser } from '@users/interfaces/user.interface';
 
 @Injectable()
 export class QuestService implements ICrudService<Quest> {
@@ -14,12 +14,12 @@ export class QuestService implements ICrudService<Quest> {
     private readonly questRepository: Repository<Quest>,
   ) { }
 
-  create(data: CreateQuestDto): Promise<Quest> {
+  create(data: Partial<Quest>): Promise<Quest> {
     const quest = this.questRepository.create({
       ...data,
       creator: {
         id: data.creator
-      }
+      } as IUser
     });
     return this.questRepository.save(quest);
   }
@@ -46,8 +46,11 @@ export class QuestService implements ICrudService<Quest> {
     return this.questRepository.find({ creator });
   }
 
-  async getQuestsByParticipant(participant: User): Promise<Quest[]> {
-    // TODO: many to many
-    return [];
+  getQuestsTaken(userId: number): Promise<Quest[]> {
+    return this.questRepository
+      .createQueryBuilder('quest')
+      .innerJoin('quest.participants', 'user')
+      .where('user.id = :userId', { userId })
+      .getMany();
   }
 }

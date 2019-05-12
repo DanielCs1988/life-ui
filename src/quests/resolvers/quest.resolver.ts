@@ -2,14 +2,15 @@ import { Inject } from '@nestjs/common';
 import { Parent, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { PubSub } from 'apollo-server-express';
 
+import { Tokens } from '@constants/tokens';
+import { createBaseResolver } from '@shared/base.resolver';
+import { UserService } from '@users/services/user.service';
+import { User } from '@users/models/user.model';
+
 import { Quest } from "../models/quest.model";
 import {QuestService} from "../services/quest.service";
-import { createBaseResolver } from '../../shared/base.resolver';
 import { CreateQuestDto } from '../models/create-quest.dto';
 import { UpdateQuestDto } from '../models/update-quest.dto';
-import { Tokens } from '../../constants/tokens';
-import { User } from '../../users/models/user.model';
-import { UserService } from '../../users/services/user.service';
 
 const QuestBaseResolver = createBaseResolver({
   name: 'quest',
@@ -26,9 +27,13 @@ export class QuestResolver extends QuestBaseResolver {
     private readonly userService: UserService,
   ) { super(); }
 
-  // TODO: should it be fetched from quest or user service?
-  // @ResolveProperty()
-  // creator(@Parent() quest: Quest): Promise<User> {
-  //   return this.userService.getById(quest.creator.id)
-  // }
+  @ResolveProperty()
+  async creator(@Parent() quest: Quest): Promise<User> {
+    return this.userService.getCreator(quest.id);
+  }
+
+  @ResolveProperty()
+  async participants(@Parent() quest: Quest): Promise<User[]> {
+    return this.userService.getParticipants(quest.id);
+  }
 }

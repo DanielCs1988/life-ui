@@ -55,4 +55,9 @@ export class UserResolver extends UserBaseResolver {
   async addresses(@Parent() user: User): Promise<Address[]> {
     return this.addressService.getUserAddresses(user);
   }
+
+  @ResolveProperty()
+  async questsTaken(@Parent() user: User): Promise<Quest[]> {
+    return this.questService.getQuestsTaken(user.id);
+  }
 }

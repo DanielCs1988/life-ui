@@ -36,4 +36,20 @@ export class UserService implements ICrudService<User> {
     const result = await this.userRepository.delete(id);
     return result.affected > 0;
   }
+
+  getCreator(questId: number): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.questsCreated', 'quest')
+      .where('quest.id = :questId', { questId })
+      .getOne();
+  }
+
+  getParticipants(questId: number): Promise<User[]> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .innerJoin('user.questsTaken', 'quest')
+      .where('quest.id = :questId', { questId })
+      .getMany();
+  }
 }
