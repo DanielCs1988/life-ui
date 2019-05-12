@@ -1,8 +1,8 @@
 import { IUpdateTrackerEntity } from '@shared/entity.interface';
-import { Quest } from '@quests/models/quest.model';
 import { RepeatableQuest } from '@quests/models/repeatable-quest.model';
 import { IAddress } from './address.interface';
 import { IBankAccount } from './bank-account.interface';
+import { IQuest } from '@quests/interfaces/quest.interface';
 
 export interface IUser extends IUpdateTrackerEntity {
   firstName?: string;
@@ -11,8 +11,8 @@ export interface IUser extends IUpdateTrackerEntity {
   profilePictureUri?: string;
   email?: string;
   phoneNumber?: string;
-  questsCreated?: Quest[];
-  questsTaken?: Quest[];
+  questsCreated?: IQuest[];
+  questsTaken?: IQuest[];
   repeatableQuests?: RepeatableQuest[];
   bankAccounts?: IBankAccount[];
   addresses?: IAddress[];

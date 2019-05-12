@@ -70,18 +70,18 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
       return isDeleted;
     }
 
-    @Subscription(returns => entity)
-    userCreated(): AsyncIterator<T> {
+    @Subscription(returns => entity, { name: `${name}Created` })
+    created(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.CREATED);
     }
 
-    @Subscription(returns => entity)
-    userUpdated(): AsyncIterator<T> {
+    @Subscription(returns => entity, { name: `${name}Updated` })
+    updated(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.UPDATED);
     }
 
-    @Subscription(returns => Int)
-    userDeleted(): AsyncIterator<number> {
+    @Subscription(returns => Int, { name: `${name}Deleted` })
+    deleted(): AsyncIterator<number> {
       return this.pubSub.asyncIterator(events.DELETED);
     }
   }

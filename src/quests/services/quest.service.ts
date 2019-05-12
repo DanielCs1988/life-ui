@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { ICrudService } from '@shared/crud-service.interface';
 import { User } from '@users/models/user.model';
 import { Quest } from '../models/quest.model';
+import { CreateQuestDto } from '../models/create-quest.dto';
 
 @Injectable()
 export class QuestService implements ICrudService<Quest> {
@@ -13,8 +14,13 @@ export class QuestService implements ICrudService<Quest> {
     private readonly questRepository: Repository<Quest>,
   ) { }
 
-  create(data: Partial<Quest>): Promise<Quest> {
-    const quest = this.questRepository.create(data);
+  create(data: CreateQuestDto): Promise<Quest> {
+    const quest = this.questRepository.create({
+      ...data,
+      creator: {
+        id: data.creator
+      }
+    });
     return this.questRepository.save(quest);
   }
 
