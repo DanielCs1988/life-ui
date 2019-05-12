@@ -49,38 +49,38 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
 
     @Mutation(returns => entity, { name: `create${ucName}` })
     async create(@Args({ name: 'data', type: () => createDto }) createDto: C): Promise<T> {
-      const userCreated = await this.service.create(createDto);
-      this.pubSub.publish(events.CREATED, { userCreated });
-      return userCreated;
+      const newEntity = await this.service.create(createDto);
+      this.pubSub.publish(events.CREATED, { [events.CREATED]: newEntity });
+      return newEntity;
     }
 
     @Mutation(returns => entity, { name: `update${ucName}` })
     async update(@Args({ name: 'data', type: () => updateDto }) updateDto: U): Promise<T> {
-      const userUpdated = await this.service.update(updateDto);
-      this.pubSub.publish(events.UPDATED, { userUpdated });
-      return userUpdated;
+      const newEntity = await this.service.update(updateDto);
+      this.pubSub.publish(events.UPDATED, { [events.UPDATED]: newEntity });
+      return newEntity;
     }
 
     @Mutation(returns => Boolean, { name: `delete${ucName}` })
     async delete(@Args() { id }: IdArgs): Promise<boolean> {
       const isDeleted = await this.service.delete(id);
       if (isDeleted) {
-        this.pubSub.publish(events.DELETED, { userDeleted: id });
+        this.pubSub.publish(events.DELETED, { [events.DELETED]: id });
       }
       return isDeleted;
     }
 
-    @Subscription(returns => entity, { name: `${name}Created` })
+    @Subscription(returns => entity, { name: events.CREATED })
     created(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.CREATED);
     }
 
-    @Subscription(returns => entity, { name: `${name}Updated` })
+    @Subscription(returns => entity, { name: events.UPDATED })
     updated(): AsyncIterator<T> {
       return this.pubSub.asyncIterator(events.UPDATED);
     }
 
-    @Subscription(returns => Int, { name: `${name}Deleted` })
+    @Subscription(returns => Int, { name: events.DELETED })
     deleted(): AsyncIterator<number> {
       return this.pubSub.asyncIterator(events.DELETED);
     }

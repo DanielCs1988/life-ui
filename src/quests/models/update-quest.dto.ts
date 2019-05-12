@@ -5,12 +5,14 @@ import { BaseDto } from '../../shared/base.dto';
 
 @InputType()
 export class UpdateQuestDto extends BaseDto implements IQuest {
-  @Field()
+  @Field({ nullable: true })
   @Length(5, 100)
+  @IsOptional()
   name?: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Length(5, 100)
+  @IsOptional()
   type?: string;
 
   @Field({ nullable: true })
