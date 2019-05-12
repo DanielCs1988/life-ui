@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PubSub } from 'apollo-server-express';
 
-import { Tokens } from "../constants/tokens";
+import { Tokens } from "@constants/tokens";
 
 @Module({
   providers: [

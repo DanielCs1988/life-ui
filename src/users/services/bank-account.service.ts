@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import {InjectRepository} from '@nestjs/typeorm';
 import {Repository} from "typeorm";
 
+import { ICrudService } from '@shared/crud-service.interface';
 import {BankAccount} from "../models/bank-account.model";
 import {User} from "../models/user.model";
 import {BankAccountDto} from "../models/bank-account.dto";
-import { ICrudService } from '../../shared/crud-service.interface';
 
 @Injectable()
 export class BankAccountService implements ICrudService<BankAccount> {

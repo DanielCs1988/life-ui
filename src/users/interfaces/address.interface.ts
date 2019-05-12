@@ -1,4 +1,4 @@
-import { IEntity } from '../../shared/entity.interface';
+import { IEntity } from '@shared/entity.interface';
 import { User } from '../models/user.model';
 
 export interface IAddress extends IEntity {

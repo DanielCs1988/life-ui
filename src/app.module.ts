@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UsersModule } from './users/users.module';
-import { QuestsModule } from './quests/quests.module';
+import { UsersModule } from '@users/users.module';
+import { QuestsModule } from '@quests/quests.module';
 
 @Module({
   imports: [

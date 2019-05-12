@@ -1,9 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
 
+import { IdArgs } from '@shared/types';
 import { RepeatableQuest } from '../models/repeatable-quest.model';
 import { RepeatableQuestService } from '../services/repeatable-quest.service';
-import { IdArgs } from '../../shared/types';
 
 @Resolver(of => RepeatableQuest)
 export class RepeatableQuestResolver {

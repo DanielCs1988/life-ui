@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ICrudService } from '@shared/crud-service.interface';
+import { User } from '@users/models/user.model';
 import { Quest } from '../models/quest.model';
-import { User } from '../../users/models/user.model';
-import { ICrudService } from '../../shared/crud-service.interface';
 
 @Injectable()
 export class QuestService implements ICrudService<Quest> {

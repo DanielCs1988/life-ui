@@ -1,6 +1,6 @@
 import { Field, InputType } from 'type-graphql';
 import { IsEmail, IsNotEmpty, IsOptional, Length, MinLength } from 'class-validator';
-import { BaseDto } from '../../shared/base.dto';
+import { BaseDto } from '@shared/base.dto';
 import { IUser } from '../interfaces/user.interface';
 
 @InputType()

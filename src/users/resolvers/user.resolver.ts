@@ -2,20 +2,21 @@ import { Inject } from '@nestjs/common';
 import { Resolver, ResolveProperty, Parent } from '@nestjs/graphql';
 import { PubSub } from 'apollo-server-express';
 
+import { Tokens } from '@constants/tokens';
+import { createBaseResolver } from '@shared/base.resolver';
+import { Quest } from '@quests/models/quest.model';
+import { RepeatableQuestService } from '@quests/services/repeatable-quest.service';
+import { QuestService } from '@quests/services/quest.service';
+import { RepeatableQuest } from '@quests/models/repeatable-quest.model';
+
 import { User } from '../models/user.model';
 import { UserService } from '../services/user.service';
 import { BankAccount } from '../models/bank-account.model';
 import { BankAccountService } from '../services/bank-account.service';
 import { CreateUserDto } from '../models/create-user.dto';
-import { Tokens } from '../../constants/tokens';
-import { Quest } from '../../quests/models/quest.model';
-import { QuestService } from '../../quests/services/quest.service';
 import { AddressService } from '../services/address.service';
 import { Address } from '../models/address.model';
 import { UpdateUserDto } from '../models/update-user.dto';
-import { RepeatableQuestService } from '../../quests/services/repeatable-quest.service';
-import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
-import { createBaseResolver } from '../../shared/base.resolver';
 
 const UserBaseResolver = createBaseResolver({
   name: 'user',

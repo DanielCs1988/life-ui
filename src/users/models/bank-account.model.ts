@@ -2,7 +2,7 @@ import { Field, ObjectType } from "type-graphql";
 import { Column, Entity, ManyToOne } from "typeorm";
 
 import { User } from "./user.model";
-import { BaseModel } from '../../shared/base.model';
+import { BaseModel } from '@shared/base.model';
 
 @Entity()
 @ObjectType()

@@ -1,8 +1,8 @@
 import { Field, ObjectType } from 'type-graphql';
 import { Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
 
-import { User } from '../../users/models/user.model';
-import { UpdateTrackerBaseModel } from '../../shared/update-tracker-base.model';
+import { UpdateTrackerBaseModel } from '@shared/update-tracker-base.model';
+import { User } from '@users/models/user.model';
 
 @Entity()
 @ObjectType()

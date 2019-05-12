@@ -8,11 +8,11 @@ import {
   OneToMany,
 } from 'typeorm';
 
-import { Quest } from '../../quests/models/quest.model';
+import { UpdateTrackerBaseModel } from '@shared/update-tracker-base.model';
+import { Quest } from '@quests/models/quest.model';
+import { RepeatableQuest } from '@quests/models/repeatable-quest.model';
 import { BankAccount } from './bank-account.model';
 import { Address } from './address.model';
-import { RepeatableQuest } from '../../quests/models/repeatable-quest.model';
-import { UpdateTrackerBaseModel } from '../../shared/update-tracker-base.model';
 import { IUser } from '../interfaces/user.interface';
 import { IAddress } from '../interfaces/address.interface';
 import { IBankAccount } from '../interfaces/bank-account.interface';

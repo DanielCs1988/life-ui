@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UsersModule } from '../users/users.module';
+import { UsersModule } from '@users/users.module';
 import { QuestService } from './services/quest.service';
 import { QuestResolver } from './resolvers/quest.resolver';
 import { Quest } from './models/quest.model';

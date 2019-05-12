@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { ICrudService } from '@shared/crud-service.interface';
 import { User } from '../models/user.model';
 import { CreateUserDto } from '../models/create-user.dto';
 import { UpdateUserDto } from '../models/update-user.dto';
-import { ICrudService } from '../../shared/crud-service.interface';
 
 @Injectable()
 export class UserService implements ICrudService<User> {
