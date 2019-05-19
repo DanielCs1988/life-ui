@@ -5,42 +5,44 @@ import { Repository } from 'typeorm'
 import { User } from '../models/user.model'
 import { CreateUserDto } from '../models/create-user.dto'
 import { UpdateUserDto } from '../models/update-user.dto'
-import { createBaseService } from '@shared/base.service'
+import { createBaseService, createFieldResolver, FieldResolver } from '@shared/base.service'
 import { IUser } from '@users/interfaces/user.interface'
 import { IBankAccount } from '@users/interfaces/bank-account.interface'
 import { IAddress } from '@users/interfaces/address.interface'
 import { IQuest } from '@quests/interfaces/quest.interface'
+import { IRepeatableQuest } from '@quests/interfaces/repeatable-quest.interface'
 
 const UserBaseService = createBaseService<IUser, CreateUserDto, UpdateUserDto>()
 
 @Injectable()
 export class UserService extends UserBaseService {
+  private readonly fieldResolver: FieldResolver<User>
+
   constructor(
     @InjectRepository(User)
     protected readonly repository: Repository<User>,
-  ) { super() }
+  ) {
+    super()
+    this.fieldResolver = createFieldResolver(repository)
+  }
 
   async getBankAccounts(userId: number): Promise<IBankAccount[]> {
-    const { bankAccounts } = await this.repository.findOne(userId, {
-      relations: ['bankAccounts']
-    })
-
-    return bankAccounts
+    return this.fieldResolver(userId, 'bankAccounts')
   }
 
   async getAddresses(userId: number): Promise<IAddress[]> {
-    const { addresses } = await this.repository.findOne(userId, {
-      relations: ['addresses']
-    })
+    return this.fieldResolver(userId, 'addresses')
+  }
 
-    return addresses
+  async getQuestsCreated(userId: number): Promise<IQuest[]> {
+    return this.fieldResolver(userId, 'questsCreated')
   }
 
   async getQuestsTaken(userId: number): Promise<IQuest[]> {
-    const { questsTaken } = await this.repository.findOne(userId, {
-      relations: ['questsTaken']
-    });
+    return this.fieldResolver(userId, 'questsTaken')
+  }
 
-    return questsTaken
+  async getRepeatableQuests(userId: number): Promise<IRepeatableQuest[]> {
+    return this.fieldResolver(userId, 'repeatableQuests')
   }
 }

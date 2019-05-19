@@ -1,25 +1,31 @@
-import { NotFoundException } from '@nestjs/common';
-import { Args, Query, Resolver } from '@nestjs/graphql';
+import { Inject } from '@nestjs/common'
+import { Parent, ResolveProperty, Resolver } from '@nestjs/graphql'
+import { PubSub } from 'apollo-server-express'
 
-import { IdArgs } from '@shared/types';
-import { RepeatableQuest } from '../models/repeatable-quest.model';
-import { RepeatableQuestService } from '../services/repeatable-quest.service';
+import { RepeatableQuest } from '../models/repeatable-quest.model'
+import { RepeatableQuestService } from '../services/repeatable-quest.service'
+import { createBaseResolver } from '@shared/base.resolver'
+import { CreateRepeatableQuestDto } from '@quests/models/create-repeatable-quest.dto'
+import { UpdateRepeatableQuestDto } from '@quests/models/update-repeatable-quest.dto'
+import { Tokens } from '@constants/tokens'
+import { IUser } from '@users/interfaces/user.interface'
+
+const RepeatableQuestBaseResolver = createBaseResolver({
+  name: 'repeatableQuest',
+  entity: RepeatableQuest,
+  createDto: CreateRepeatableQuestDto,
+  updateDto: UpdateRepeatableQuestDto,
+})
 
 @Resolver(of => RepeatableQuest)
-export class RepeatableQuestResolver {
-  constructor(private readonly questService: RepeatableQuestService) { }
+export class RepeatableQuestResolver extends RepeatableQuestBaseResolver {
+  constructor(
+    @Inject(Tokens.PUB_SUB) protected readonly pubSub: PubSub,
+    protected readonly service: RepeatableQuestService,
+  ) { super() }
 
-  @Query(returns => [RepeatableQuest])
-  repeatableQuests(): Promise<RepeatableQuest[]> {
-    return this.questService.getAll();
-  }
-
-  @Query(returns => RepeatableQuest)
-  async repeatableQuest(@Args() { id }: IdArgs): Promise<RepeatableQuest> {
-    const quest = this.questService.getById(id);
-    if (!quest) {
-      throw new NotFoundException(`RepeatableQuest with ID ${id} does not exist.`)
-    }
-    return quest;
+  @ResolveProperty()
+  creator(@Parent() quest: RepeatableQuest): Promise<IUser> {
+    return this.service.getCreator(quest.id)
   }
 }

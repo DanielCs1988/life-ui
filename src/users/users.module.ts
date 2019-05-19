@@ -1,21 +1,19 @@
-import {forwardRef, Module} from '@nestjs/common';
-import {TypeOrmModule} from '@nestjs/typeorm';
+import { Module } from '@nestjs/common'
+import { TypeOrmModule } from '@nestjs/typeorm'
 
-import { SharedModule } from "@shared/shared.module";
-import {QuestsModule} from "@quests/quests.module";
-import { UserResolver } from "./resolvers/user.resolver";
-import { UserService } from './services/user.service';
-import { BankAccountService } from "./services/bank-account.service";
-import {User} from "./models/user.model";
-import {BankAccount} from "./models/bank-account.model";
-import {Address} from "./models/address.model";
-import {AddressService} from "./services/address.service";
+import { SharedModule } from '@shared/shared.module'
+import { UserResolver } from './resolvers/user.resolver'
+import { UserService } from './services/user.service'
+import { BankAccountService } from './services/bank-account.service'
+import { User } from './models/user.model'
+import { BankAccount } from './models/bank-account.model'
+import { Address } from './models/address.model'
+import { AddressService } from './services/address.service'
 import { AddressResolver } from '@users/resolvers/address.resolver'
 
 @Module({
   imports: [
     SharedModule,
-    forwardRef(() => QuestsModule),
     TypeOrmModule.forFeature([
       User,
       BankAccount,
@@ -33,4 +31,4 @@ import { AddressResolver } from '@users/resolvers/address.resolver'
     UserService,
   ],
 })
-export class UsersModule { }
+export class UsersModule {}

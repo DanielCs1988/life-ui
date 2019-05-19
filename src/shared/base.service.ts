@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm'
 import { ICrudService } from '@shared/crud-service.interface'
+import { finished } from 'stream'
 
 export function createBaseService<T, C extends T, U extends T>(ownerKey?: string) {
   abstract class BaseService implements ICrudService<T> {
@@ -38,4 +39,14 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
   }
 
   return BaseService
+}
+
+export type FieldResolver<T> = (id: number, fieldName: string) => any
+
+export const createFieldResolver = <T>(repository: Repository<T>): FieldResolver<T> => async (id: number, fieldName: string) => {
+  const entity = await repository.findOne(id, {
+    relations: [fieldName]
+  })
+
+  return entity[fieldName]
 }

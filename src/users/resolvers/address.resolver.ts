@@ -9,7 +9,6 @@ import { UpdateAddressDto } from '@users/models/update-address.dto'
 import { AddressService } from '@users/services/address.service'
 import { Tokens } from '@constants/tokens'
 import { User } from '@users/models/user.model'
-import { UserService } from '@users/services/user.service'
 
 const BaseAddressResolver = createBaseResolver({
   name: 'address',
@@ -24,7 +23,6 @@ export class AddressResolver extends BaseAddressResolver {
   constructor(
     @Inject(Tokens.PUB_SUB) protected readonly pubSub: PubSub,
     protected readonly service: AddressService,
-    private readonly userService: UserService,
   ) { super() }
 
   @ResolveProperty()

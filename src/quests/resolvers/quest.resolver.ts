@@ -4,13 +4,12 @@ import { PubSub } from 'apollo-server-express';
 
 import { Tokens } from '@constants/tokens';
 import { createBaseResolver } from '@shared/base.resolver';
-import { UserService } from '@users/services/user.service';
-import { User } from '@users/models/user.model';
 
 import { Quest } from "../models/quest.model";
 import {QuestService} from "../services/quest.service";
 import { CreateQuestDto } from '../models/create-quest.dto';
 import { UpdateQuestDto } from '../models/update-quest.dto';
+import { IUser } from '@users/interfaces/user.interface'
 
 const QuestBaseResolver = createBaseResolver({
   name: 'quest',
@@ -24,16 +23,15 @@ export class QuestResolver extends QuestBaseResolver {
   constructor(
     @Inject(Tokens.PUB_SUB) protected readonly pubSub: PubSub,
     protected readonly service: QuestService,
-    private readonly userService: UserService,
   ) { super(); }
 
-  /*@ResolveProperty()
-  async creator(@Parent() quest: Quest): Promise<User> {
-    return this.userService.getQuestCreator(quest.id);
+  @ResolveProperty()
+  async creator(@Parent() quest: Quest): Promise<IUser> {
+    return this.service.getCreator(quest.id);
   }
 
   @ResolveProperty()
-  async participants(@Parent() quest: Quest): Promise<User[]> {
-    return this.userService.getParticipants(quest.id);
-  }*/
+  async participants(@Parent() quest: Quest): Promise<IUser[]> {
+    return this.service.getParticipants(quest.id);
+  }
 }

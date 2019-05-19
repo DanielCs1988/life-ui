@@ -2,44 +2,26 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { ICrudService } from '@shared/crud-service.interface';
-import { User } from '@users/models/user.model';
 import { RepeatableQuest } from '../models/repeatable-quest.model';
+import { createBaseService, createFieldResolver, FieldResolver } from '@shared/base.service'
+import { IRepeatableQuest } from '@quests/interfaces/repeatable-quest.interface'
+import { IUser } from '@users/interfaces/user.interface'
+
+const BaseRepeatableQuestService = createBaseService<IRepeatableQuest, any, any>('creator')
 
 @Injectable()
-export class RepeatableQuestService implements ICrudService<RepeatableQuest> {
+export class RepeatableQuestService extends BaseRepeatableQuestService {
+  private readonly fieldResolver: FieldResolver<RepeatableQuest>
+
   constructor(
     @InjectRepository(RepeatableQuest)
-    private readonly repository: Repository<RepeatableQuest>,
-  ) { }
-
-  create(data: Partial<RepeatableQuest>): Promise<RepeatableQuest> {
-    const quest = this.repository.create(data);
-    return this.repository.save(quest);
+    protected readonly repository: Repository<RepeatableQuest>,
+  ) {
+    super()
+    this.fieldResolver = createFieldResolver(repository)
   }
 
-  async delete(id: number): Promise<boolean> {
-    const result = await this.repository.delete(id);
-    return result.affected > 0;
-  }
-
-  getAll(): Promise<RepeatableQuest[]> {
-    return this.repository.find();
-  }
-
-  getById(id: number): Promise<RepeatableQuest> {
-    return this.repository.findOne(id);
-  }
-
-  async update(data: Partial<RepeatableQuest>): Promise<RepeatableQuest> {
-    const quest = await this.repository.preload(data);
-    if (!quest) {
-      return quest;
-    }
-    return this.repository.save(quest);
-  }
-
-  getByCreator(creator: User): Promise<RepeatableQuest[]> {
-    return this.repository.find({ creator });
+  getCreator(questId: number): Promise<IUser> {
+    return this.fieldResolver(questId, 'creator')
   }
 }

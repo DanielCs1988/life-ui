@@ -3,10 +3,11 @@ import { Column, Entity, ManyToOne } from 'typeorm';
 
 import { UpdateTrackerBaseModel } from '@shared/update-tracker-base.model';
 import { User } from '@users/models/user.model';
+import { IRepeatableQuest } from '@quests/interfaces/repeatable-quest.interface'
 
 @Entity()
 @ObjectType()
-export class RepeatableQuest extends UpdateTrackerBaseModel {
+export class RepeatableQuest extends UpdateTrackerBaseModel implements IRepeatableQuest {
   @Column({ length: 100 })
   @Field()
   name: string;
