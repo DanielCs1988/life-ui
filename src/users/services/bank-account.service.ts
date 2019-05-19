@@ -29,6 +29,9 @@ export class BankAccountService implements ICrudService<BankAccount> {
 
   async update(data: BankAccount): Promise<BankAccount> {
     const account = await this.bankAccountRepository.preload(data);
+    if (!account) {
+      return account;
+    }
     return this.bankAccountRepository.save(account);
   }
 

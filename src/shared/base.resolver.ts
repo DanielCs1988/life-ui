@@ -6,6 +6,7 @@ import { PubSub } from 'apollo-server-express';
 import { ICrudService } from './crud-service.interface';
 import { IdArgs } from './types';
 import { capitalize } from './utils';
+import {IEntity} from "@shared/entity.interface";
 
 export interface ICreateBaseResolverParams<T, C, U> {
   name: string;
@@ -15,7 +16,6 @@ export interface ICreateBaseResolverParams<T, C, U> {
   updateDto: U;
 }
 
-// TODO: error handling
 export function createBaseResolver<T extends ClassType, C extends ClassType, U extends ClassType>(
   params: ICreateBaseResolverParams<T, C, U>
 ) {
@@ -40,7 +40,7 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
 
     @Query(returns => entity, { name })
     async get(@Args() { id }: IdArgs): Promise<T> {
-      const entity = this.service.getById(id);
+      const entity = await this.service.getById(id);
       if (!entity) {
         throw new NotFoundException(`${ucName} with ID ${id} does not exist.`);
       }
@@ -57,6 +57,9 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
     @Mutation(returns => entity, { name: `update${ucName}` })
     async update(@Args({ name: 'data', type: () => updateDto }) updateDto: U): Promise<T> {
       const newEntity = await this.service.update(updateDto);
+      if (!newEntity) {
+        throw new NotFoundException(`${ucName} with ID ${(<IEntity>updateDto).id} does not exist.`);
+      }
       this.pubSub.publish(events.UPDATED, { [events.UPDATED]: newEntity });
       return newEntity;
     }
@@ -66,8 +69,9 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
       const isDeleted = await this.service.delete(id);
       if (isDeleted) {
         this.pubSub.publish(events.DELETED, { [events.DELETED]: id });
+        return isDeleted;
       }
-      return isDeleted;
+      throw new NotFoundException(`${ucName} with ID ${id} does not exist.`);
     }
 
     @Subscription(returns => entity, { name: events.CREATED })

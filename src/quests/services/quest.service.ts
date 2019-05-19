@@ -39,6 +39,9 @@ export class QuestService implements ICrudService<Quest> {
 
   async update(data: Partial<Quest>): Promise<Quest> {
     const quest = await this.questRepository.preload(data);
+    if (!quest) {
+      return quest;
+    }
     return this.questRepository.save(quest);
   }
 

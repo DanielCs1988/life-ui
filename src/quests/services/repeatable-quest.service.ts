@@ -33,6 +33,9 @@ export class RepeatableQuestService implements ICrudService<RepeatableQuest> {
 
   async update(data: Partial<RepeatableQuest>): Promise<RepeatableQuest> {
     const quest = await this.repository.preload(data);
+    if (!quest) {
+      return quest;
+    }
     return this.repository.save(quest);
   }
 

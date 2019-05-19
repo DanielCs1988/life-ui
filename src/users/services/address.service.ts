@@ -34,6 +34,9 @@ export class AddressService implements ICrudService<Address> {
 
   async update(data: Partial<Address>): Promise<Address> {
     const address = await this.addressRepository.preload(data);
+    if (!address) {
+      return address;
+    }
     return this.addressRepository.save(address);
   }
 

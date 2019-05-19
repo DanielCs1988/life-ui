@@ -29,6 +29,9 @@ export class UserService implements ICrudService<User> {
 
   async update(data: UpdateUserDto): Promise<User> {
     const user = await this.userRepository.preload(data);
+    if (!user) {
+      return user;
+    }
     return this.userRepository.save(user);
   }
 
