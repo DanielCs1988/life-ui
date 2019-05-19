@@ -1,6 +1,6 @@
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { ICrudService } from '@shared/crud-service.interface'
-import { finished } from 'stream'
+import { OptionsDto } from '@shared/options.dto'
 
 export function createBaseService<T, C extends T, U extends T>(ownerKey?: string) {
   abstract class BaseService implements ICrudService<T> {
@@ -24,8 +24,10 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
       return result.affected > 0
     }
 
-    getAll(): Promise<T[]> {
-      return this.repository.find()
+    getAll(options?: OptionsDto): Promise<T[]> {
+      return options
+        ? this.repository.find(createQueryOptions(options))
+        : this.repository.find()
     }
 
     getById(id: number): Promise<T> {
@@ -39,6 +41,23 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
   }
 
   return BaseService
+}
+
+const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC' }: OptionsDto): FindManyOptions => {
+  const options: FindManyOptions = {}
+  if (orderBy) {
+    options.order = {
+      [orderBy]: orderDirection
+    }
+  }
+  if (limit) {
+    options.take = limit
+  }
+  if (offset) {
+    options.skip = offset
+  }
+
+  return options
 }
 
 export type FieldResolver<T> = (id: number, fieldName: string) => any

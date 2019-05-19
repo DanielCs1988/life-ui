@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common'
 import { Args, Mutation, Query, Subscription } from '@nestjs/graphql';
 import { ClassType, Int, Resolver } from 'type-graphql';
 import { PubSub } from 'apollo-server-express';
@@ -7,6 +7,7 @@ import { ICrudService } from './crud-service.interface';
 import { IdArgs } from './types';
 import { capitalize } from './utils';
 import {IEntity} from "@shared/entity.interface";
+import { OptionsDto } from '@shared/options.dto'
 
 export interface ICreateBaseResolverParams<T, C, U> {
   name: string;
@@ -34,8 +35,15 @@ export function createBaseResolver<T extends ClassType, C extends ClassType, U e
     protected abstract readonly pubSub: PubSub;
 
     @Query(returns => [entity], { name: pluralName })
-    async getAll(): Promise<T[]> {
-      return this.service.getAll();
+    async getAll(@Args({ name: 'options', nullable: true, type: () => OptionsDto }) options?: OptionsDto): Promise<T[]> {
+      try {
+        return await this.service.getAll(options);
+      } catch (error) {
+        if (error.message.includes('column was not found')) {
+          throw new BadRequestException(`${ucName} has no field called ${options.orderBy}!`)
+        }
+        throw new InternalServerErrorException('Database error!')
+      }
     }
 
     @Query(returns => entity, { name })
