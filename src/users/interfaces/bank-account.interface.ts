@@ -3,6 +3,6 @@ import { IUser } from './user.interface';
 
 export interface IBankAccount extends IEntity {
   account?: string;
-  owner?: IUser;
+  owner?: IUser | number;
   name?: string;
 }

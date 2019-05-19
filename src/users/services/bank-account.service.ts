@@ -1,23 +1,29 @@
-import { Injectable } from '@nestjs/common';
-import {InjectRepository} from '@nestjs/typeorm';
-import {Repository} from "typeorm";
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm'
 
-import {BankAccount} from "../models/bank-account.model";
-import {User} from "../models/user.model";
-import {BankAccountDto} from "../models/bank-account.dto";
-import { createBaseService } from '@shared/base.service'
+import { BankAccount } from '../models/bank-account.model'
+import { createBaseService, createFieldResolver, FieldResolver } from '@shared/base.service'
 import { IBankAccount } from '@users/interfaces/bank-account.interface'
+import { UpdateBankAccountDto } from '@users/models/update-bank-account.dto'
+import { CreateBankAccountDto } from '@users/models/create-bank-account.dto'
+import { IUser } from '@users/interfaces/user.interface'
 
-const BankAccountBaseService = createBaseService<IBankAccount, BankAccountDto, BankAccountDto>('owner')
+const BankAccountBaseService = createBaseService<IBankAccount, CreateBankAccountDto, UpdateBankAccountDto>('owner')
 
 @Injectable()
 export class BankAccountService extends BankAccountBaseService {
+  private readonly fieldResolver: FieldResolver<BankAccount>
+
   constructor(
     @InjectRepository(BankAccount)
     protected readonly repository: Repository<BankAccount>,
-    ) { super() }
+  ) {
+    super()
+    this.fieldResolver = createFieldResolver(repository)
+  }
 
-  async getUserBankAccounts(owner: User): Promise<BankAccount[]>  {
-    return this.repository.find({ owner });
+  getOwner(accountId: number): Promise<IUser> {
+    return this.fieldResolver(accountId, 'owner')
   }
 }
