@@ -9,7 +9,7 @@ import { UpdateQuestDto } from '@quests/models/update-quest.dto'
 import { IQuest } from '@quests/interfaces/quest.interface'
 import { IUser } from '@users/interfaces/user.interface'
 
-const QuestBaseService = createBaseService<IQuest, CreateQuestDto, UpdateQuestDto>('creator')
+const QuestBaseService = createBaseService<IQuest, CreateQuestDto, UpdateQuestDto>('quest', 'creator')
 
 @Injectable()
 export class QuestService extends QuestBaseService {

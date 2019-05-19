@@ -9,7 +9,7 @@ import { UpdateAddressDto } from '@users/models/update-address.dto'
 import { Address } from '../models/address.model';
 import { User } from '../models/user.model';
 
-const AddressBaseService = createBaseService<IAddress, CreateAddressDto, UpdateAddressDto>('owner')
+const AddressBaseService = createBaseService<IAddress, CreateAddressDto, UpdateAddressDto>('address', 'owner')
 
 @Injectable()
 export class AddressService extends AddressBaseService {

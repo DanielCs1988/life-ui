@@ -12,7 +12,7 @@ import { IAddress } from '@users/interfaces/address.interface'
 import { IQuest } from '@quests/interfaces/quest.interface'
 import { IRepeatableQuest } from '@quests/interfaces/repeatable-quest.interface'
 
-const UserBaseService = createBaseService<IUser, CreateUserDto, UpdateUserDto>()
+const UserBaseService = createBaseService<IUser, CreateUserDto, UpdateUserDto>('user')
 
 @Injectable()
 export class UserService extends UserBaseService {

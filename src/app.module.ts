@@ -22,6 +22,7 @@ import { QuestsModule } from '@quests/quests.module';
       database: 'life_ui',
       entities: [__dirname + '/**/*.model{.ts,.js}'],
       synchronize: true,
+      cache: true,
     }),
   ],
 })

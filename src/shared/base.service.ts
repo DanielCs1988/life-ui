@@ -1,9 +1,16 @@
-import { FindManyOptions, Like, Repository } from 'typeorm'
+import { FindManyOptions, getConnection, Like, Repository } from 'typeorm'
 import { ICrudService } from '@shared/crud-service.interface'
 import { OptionsDto } from '@shared/options.dto'
+import { ICacheOptions } from '@shared/types'
 
-export function createBaseService<T, C extends T, U extends T>(ownerKey?: string) {
+export function createBaseService<T, C extends T, U extends T>(entityName: string, ownerKey?: string) {
+  const cache = {
+    id: entityName,
+    milliseconds: 3600000,  // 1 hour
+  }
+
   abstract class BaseService implements ICrudService<T> {
+    private readonly connection = getConnection()
     protected abstract readonly repository: Repository<T>
 
     create(data: C): Promise<T> {
@@ -15,19 +22,22 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
           }
         })
         : this.repository.create(data)
+      this.invalidateCache()
 
       return this.repository.save(entity)
     }
 
     async delete(id: number): Promise<boolean> {
       const result = await this.repository.delete(id)
+      this.invalidateCache()
+
       return result.affected > 0
     }
 
     getAll(options?: OptionsDto): Promise<T[]> {
       return options
-        ? this.repository.find(createQueryOptions(options))
-        : this.repository.find()
+        ? this.repository.find(createQueryOptions(options, cache))
+        : this.repository.find({ cache })
     }
 
     getById(id: number): Promise<T> {
@@ -36,15 +46,22 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
 
     async update(data: U): Promise<T> {
       const entity = await this.repository.preload(data)
+      this.invalidateCache()
+
       return entity ? this.repository.save(entity) : entity
+    }
+
+    private invalidateCache() {
+      this.connection.queryResultCache.remove([entityName])
     }
   }
 
   return BaseService
 }
 
-const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC', search }: OptionsDto): FindManyOptions => {
-  const options: FindManyOptions = {}
+const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC', search }: OptionsDto, cache: ICacheOptions): FindManyOptions => {
+  const options: FindManyOptions = { cache }
+
   if (orderBy) {
     options.order = {
       [orderBy]: orderDirection

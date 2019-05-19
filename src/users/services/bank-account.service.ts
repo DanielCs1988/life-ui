@@ -9,7 +9,7 @@ import { UpdateBankAccountDto } from '@users/models/update-bank-account.dto'
 import { CreateBankAccountDto } from '@users/models/create-bank-account.dto'
 import { IUser } from '@users/interfaces/user.interface'
 
-const BankAccountBaseService = createBaseService<IBankAccount, CreateBankAccountDto, UpdateBankAccountDto>('owner')
+const BankAccountBaseService = createBaseService<IBankAccount, CreateBankAccountDto, UpdateBankAccountDto>('bankAccount', 'owner')
 
 @Injectable()
 export class BankAccountService extends BankAccountBaseService {

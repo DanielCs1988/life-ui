@@ -7,7 +7,7 @@ import { createBaseService, createFieldResolver, FieldResolver } from '@shared/b
 import { IRepeatableQuest } from '@quests/interfaces/repeatable-quest.interface'
 import { IUser } from '@users/interfaces/user.interface'
 
-const BaseRepeatableQuestService = createBaseService<IRepeatableQuest, any, any>('creator')
+const BaseRepeatableQuestService = createBaseService<IRepeatableQuest, any, any>('repeatableQuest', 'creator')
 
 @Injectable()
 export class RepeatableQuestService extends BaseRepeatableQuestService {

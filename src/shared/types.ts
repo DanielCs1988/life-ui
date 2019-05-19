@@ -13,3 +13,8 @@ export class Id {
   @Field(type => Int)
   id: number;
 }
+
+export interface ICacheOptions {
+  id: string
+  milliseconds: number
+}
