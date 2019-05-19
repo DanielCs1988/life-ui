@@ -1,4 +1,4 @@
-import { FindManyOptions, Repository } from 'typeorm'
+import { FindManyOptions, Like, Repository } from 'typeorm'
 import { ICrudService } from '@shared/crud-service.interface'
 import { OptionsDto } from '@shared/options.dto'
 
@@ -43,7 +43,7 @@ export function createBaseService<T, C extends T, U extends T>(ownerKey?: string
   return BaseService
 }
 
-const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC' }: OptionsDto): FindManyOptions => {
+const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC', search }: OptionsDto): FindManyOptions => {
   const options: FindManyOptions = {}
   if (orderBy) {
     options.order = {
@@ -55,6 +55,11 @@ const createQueryOptions = ({ limit, offset, orderBy, orderDirection = 'ASC' }: 
   }
   if (offset) {
     options.skip = offset
+  }
+  if (search) {
+    options.where = {
+      [search.field]: Like(`%${search.value}%`)
+    }
   }
 
   return options

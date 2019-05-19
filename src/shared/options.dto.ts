@@ -1,5 +1,6 @@
 import { Field, InputType, Int } from 'type-graphql'
 import { IsIn, IsNotEmpty, IsOptional, IsPositive } from 'class-validator'
+import { SearchDto } from '@shared/search.dto'
 
 @InputType()
 export class OptionsDto {
@@ -22,4 +23,8 @@ export class OptionsDto {
   @IsIn([ 'ASC', 'DESC' ])
   @IsOptional()
   orderDirection?: 'ASC' | 'DESC'
+
+  @Field(type => SearchDto, { nullable: true })
+  @IsOptional()
+  search?: SearchDto
 }
