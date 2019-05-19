@@ -1,9 +1,9 @@
 import { IEntity } from '@shared/entity.interface';
-import { User } from '../models/user.model';
+import { IUser } from '@users/interfaces/user.interface'
 
 export interface IAddress extends IEntity {
   address?: string;
-  owner?: User;
+  owner?: IUser | number;
   name?: string;
   latitude?: number;
   longitude?: number;

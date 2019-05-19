@@ -10,6 +10,7 @@ import {User} from "./models/user.model";
 import {BankAccount} from "./models/bank-account.model";
 import {Address} from "./models/address.model";
 import {AddressService} from "./services/address.service";
+import { AddressResolver } from '@users/resolvers/address.resolver'
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import {AddressService} from "./services/address.service";
     UserService,
     BankAccountService,
     AddressService,
+    AddressResolver,
   ],
   exports: [
     UserService,

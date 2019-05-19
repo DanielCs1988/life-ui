@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm'
 import { ICrudService } from '@shared/crud-service.interface'
 
-export function createBaseService<T, C, U>(ownerKey?: string) {
+export function createBaseService<T, C extends T, U extends T>(ownerKey?: string) {
   abstract class BaseService implements ICrudService<T> {
     protected abstract readonly repository: Repository<T>
 

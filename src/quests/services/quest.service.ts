@@ -7,8 +7,9 @@ import { Quest } from '../models/quest.model';
 import { createBaseService } from '@shared/base.service'
 import { CreateQuestDto } from '@quests/models/create-quest.dto'
 import { UpdateQuestDto } from '@quests/models/update-quest.dto'
+import { IQuest } from '@quests/interfaces/quest.interface'
 
-const QuestBaseService = createBaseService<Quest, CreateQuestDto, UpdateQuestDto>('creator')
+const QuestBaseService = createBaseService<IQuest, CreateQuestDto, UpdateQuestDto>('creator')
 
 @Injectable()
 export class QuestService extends QuestBaseService {

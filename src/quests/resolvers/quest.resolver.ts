@@ -27,13 +27,13 @@ export class QuestResolver extends QuestBaseResolver {
     private readonly userService: UserService,
   ) { super(); }
 
-  @ResolveProperty()
+  /*@ResolveProperty()
   async creator(@Parent() quest: Quest): Promise<User> {
-    return this.userService.getCreator(quest.id);
+    return this.userService.getQuestCreator(quest.id);
   }
 
   @ResolveProperty()
   async participants(@Parent() quest: Quest): Promise<User[]> {
     return this.userService.getParticipants(quest.id);
-  }
+  }*/
 }
